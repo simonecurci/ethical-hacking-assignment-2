@@ -35,20 +35,20 @@ The laboratory consists of three virtual machines on an isolated internal networ
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     VirtualBox Host                          │
-│                                                               │
-│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐│
-│  │   Gateway/     │  │     Victim     │  │    Attacker    ││
-│  │    Server      │  │   (Ubuntu)     │  │  (Kali Linux)  ││
-│  │  192.168.100.1 │  │ 192.168.100.2  │  │ 192.168.100.3  ││
-│  │                │  │                │  │                ││
-│  │ - NAT Router   │  │ - Static IP    │  │ - Scapy        ││
-│  │ - DNS (dnsmasq)│  │ - DHCP Client  │  │ - NFQueue      ││
-│  │ - Apache       │  │                │  │ - Wireshark    ││
-│  └────────┬───────┘  └────────┬───────┘  └────────┬───────┘│
-│           │                   │                    │         │
-│           └───────────────────┴────────────────────┘         │
-│                        labnet (Internal Network)             │
+│                     VirtualBox Host                         │
+│                                                             │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐ │
+│  │   Gateway/     │  │     Victim     │  │    Attacker    │ │
+│  │    Server      │  │   (Ubuntu)     │  │  (Kali Linux)  │ │
+│  │  192.168.100.1 │  │ 192.168.100.2  │  │ 192.168.100.3  │ │
+│  │                │  │                │  │                │ │
+│  │ - NAT Router   │  │ - Static IP    │  │ - Scapy        │ │
+│  │ - DNS (dnsmasq)│  │ - DHCP Client  │  │ - NFQueue      │ │
+│  │ - Apache       │  │                │  │ - Wireshark    │ │
+│  └────────┬───────┘  └────────┬───────┘  └─────────┬──────┘ │
+│           │                   │                    │        │
+│           └───────────────────┴────────────────────┘        │
+│                        labnet (Internal Network)            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -108,8 +108,8 @@ sudo apt install -y \
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd "Ethical Hacking Assignment 2"
+git clone https://github.com/simonecurci/ethical-hacking-assignment-2.git
+cd ethical-hacking-assignment-2
 ```
 
 ### 2. Install Python Dependencies
@@ -131,7 +131,7 @@ Follow the detailed setup instructions in the lab report (`report.pdf`) or see t
 Establish a Man-in-the-Middle position between the victim and gateway:
 
 ```bash
-cd "Task 1"
+cd scripts
 sudo python3 arp_spoof.py -v 192.168.100.2 -g 192.168.100.1 -i eth0 --verbose
 ```
 
@@ -143,23 +143,27 @@ sudo python3 arp_spoof.py -v 192.168.100.2 -g 192.168.100.1 -i eth0 --verbose
 
 **Graceful Exit:** Press `Ctrl+C` to stop the attack and restore ARP tables.
 
+**Captured Traffic:** `pcap_files/arp_spoof_task_1.pcap`
+
 ### Task 2: Traffic Analysis
 
 Analyze captured PCAP files to extract sensitive information:
 
 ```bash
-cd "Task 2"
-python3 pcap_analyzer.py -f arp_spoof_capture.pcap
+cd scripts
+python3 pcap_analyzer.py -f ../pcap_files/arp_spoof_filtered_task_2_ssh_telnet_ftp.pcap
 ```
 
 The script will extract:
 - HTTP URLs visited
 - DNS queries performed
 - Protocol statistics
-- **FTP credentials** (plaintext)
+- **FTP, Telnet, and SSH credentials** (plaintext)
 - Top network talkers
 
 **Alternative:** Open `*.pcap` files in Wireshark for manual analysis.
+
+**Evidence:** See `evidence/pcap_analyzer_task_2.log` for script output.
 
 ### Task 3: DNS Spoofing
 
@@ -167,7 +171,7 @@ Intercept and forge DNS responses using NFQUEUE:
 
 #### Step 1: Configure Targets
 
-Edit `targets.txt` with domains to spoof:
+Edit `evidence/targets_task_3.txt` with domains to spoof:
 
 ```
 example.com 192.168.100.3
@@ -186,7 +190,7 @@ sudo python3 -m http.server 80
 
 ```bash
 # Terminal 2
-cd "Task 1"
+cd scripts
 sudo python3 arp_spoof.py -v 192.168.100.2 -g 192.168.100.1 -i eth0
 ```
 
@@ -194,10 +198,10 @@ sudo python3 arp_spoof.py -v 192.168.100.2 -g 192.168.100.1 -i eth0
 
 ```bash
 # Terminal 3
-cd "Task 3"
+cd scripts
 sudo python3 dns_spoof.py \
     -i eth0 \
-    -t targets.txt \
+    -t ../evidence/targets_task_3.txt \
     -v 192.168.100.2 \
     -g 192.168.100.1 \
     -a 192.168.100.3
@@ -210,66 +214,58 @@ sudo python3 dns_spoof.py \
 - `-g, --gateway-ip`: Gateway IP address
 - `-a, --attacker-ip`: Your fake server IP (default: 192.168.100.3)
 
+**Captured Traffic:** 
+- Full capture: `pcap_files/dns_spoof_task_3.pcap`
+- Filtered (DNS only): `pcap_files/dns_spoof_filtered_task_3_only_dns_.pcap`
+
 ## 📁 Project Structure
 
 ```
-Ethical Hacking Assignment 2/
+ethical-hacking-assignment-2/
 ├── README.md                  # This file
 ├── requirements.txt           # Python dependencies
-├── report.tex                 # LaTeX lab report source
-├── Riassunto Ethical Hacking.md  # Summary notes (Italian)
 │
-├── pictures/                  # Evidence screenshots
-│   ├── Before Spoof.png
-│   ├── After Spoof.png
-│   ├── Graceful.png
-│   ├── Working Server.png
-│   ├── HTTP Packet.png
-│   ├── Protocol Statistics.png
-│   ├── Example redirect (curl).png
-│   ├── Google redirect.png
-│   └── Spoofed google dns.png
+├── evidence/                  # Evidence screenshots and logs
+│   ├── arp_table_before_spoof_task_1.png
+│   ├── arp_table_after_spoof_task_1.png
+│   ├── server_task_1.png
+│   ├── pcap_analyzer_task_2.log
+│   ├── wireshark_packets_task_2.png
+│   ├── wireshark_statistics_task_2.png
+│   ├── targets_task_3.txt
+│   ├── fake_website_task_3.log
+│   ├── redirect_curl_task_3.png
+│   ├── browser_spoofed_google_task_3.png
+│   └── dns_spoofed_google_task_3.png
 │
-├── Task 1/                    # ARP Spoofing
-│   ├── arp_spoof.py          # Main attack script
-│   └── arp_spoof.pcap        # Traffic capture
+├── pcap_files/                # Network capture files
+│   ├── arp_spoof_task_1.pcap
+│   ├── arp_spoof_filtered_task_2_ssh_telnet_ftp.pcap
+│   ├── dns_spoof_task_3.pcap
+│   └── dns_spoof_filtered_task_3_only_dns_.pcap
 │
-├── Task 2/                    # Traffic Analysis
-│   ├── pcap_analyzer.py      # Analysis script
-│   └── arp_spoof_filtered.pcap
-│
-└── Task 3/                    # DNS Spoofing
-    ├── dns_spoof.py          # DNS spoofer (NFQUEUE)
-    ├── targets.txt           # Target domains list
-    ├── dns_spoof.pcap        # Full capture
-    └── dns_spoof_filtered.pcap
+└── scripts/                   # Python scripts
+    ├── arp_spoof.py          # ARP spoofing attack (Task 1)
+    ├── pcap_analyzer.py      # Traffic analysis tool (Task 2)
+    └── dns_spoof.py          # DNS spoofing attack (Task 3)
 ```
 
 ## 📚 Documentation
 
-### Complete Lab Report
+### Evidence and Logs
 
-A comprehensive LaTeX report (`report.tex`) is included, covering:
+All evidence from the experiments is organized in the `evidence/` folder:
 
-- Detailed lab setup and network architecture
-- Step-by-step methodology for each task
-- Evidence and screenshots
-- Security analysis and mitigation strategies
-- Ethical considerations
-
-**Compile the report:**
-
-```bash
-pdflatex report.tex
-pdflatex report.tex  # Run twice for TOC
-```
+- **Task 1 Screenshots**: ARP table states before/after spoofing, graceful restoration
+- **Task 2 Logs**: Complete output from `pcap_analyzer.py` and Wireshark statistics
+- **Task 3 Evidence**: DNS spoofing redirects, fake website logs, browser screenshots
 
 ### Key Findings
 
 1. **ARP Spoofing**: Successfully poisoned ARP caches, achieving transparent MitM position
-2. **Traffic Interception**: Extracted plaintext FTP credentials and HTTP traffic
+2. **Traffic Interception**: Extracted plaintext credentials from FTP, Telnet, and SSH traffic
 3. **DNS Manipulation**: Successfully redirected victims using NFQUEUE architecture
-4. **SSLStrip Failure**: Modern HSTS defenses effectively blocked downgrade attacks
+4. **Modern Defenses**: HTTPS and HSTS effectively prevented downgrade attacks
 
 ## 🛡️ Mitigation Strategies
 
@@ -328,6 +324,7 @@ This project is provided for **educational purposes only**. The author assumes n
 - Course: Ethical Hacking (Academic)
 - Tools: Scapy, Netfilter, Wireshark
 - Platform: VirtualBox, Kali Linux, Ubuntu
+- Repository: [github.com/simonecurci/ethical-hacking-assignment-2](https://github.com/simonecurci/ethical-hacking-assignment-2)
 
 ---
 
