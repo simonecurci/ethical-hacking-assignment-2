@@ -1,0 +1,32 @@
+# Ethical Hacking Lab - Python Requirements
+# Python 3.8+ required
+
+# Core packet manipulation library
+scapy>=2.4.5
+
+# Linux kernel packet queue for DNS spoofing (Task 3)
+# Requires: libnetfilter-queue-dev on Debian/Ubuntu
+# Install with: sudo apt-get install libnetfilter-queue-dev
+NetfilterQueue>=1.1.0
+
+# Optional but recommended packages for enhanced functionality
+
+# For better packet manipulation and firewall rules
+python-iptables>=1.0.0
+
+# For colored terminal output (optional enhancement)
+colorama>=0.4.4
+
+# For better command-line argument parsing (already in stdlib, but explicit version)
+# argparse is part of standard library in Python 3.2+
+
+# Note: Some system-level packages are also required:
+# - tcpdump: sudo apt install tcpdump
+# - wireshark: sudo apt install wireshark
+# - iptables: sudo apt install iptables (usually pre-installed)
+# - net-tools: sudo apt install net-tools (for ifconfig, arp commands)
+
+# Development and Testing (optional)
+# pytest>=7.0.0
+# pylint>=2.12.0
+# black>=22.0.0

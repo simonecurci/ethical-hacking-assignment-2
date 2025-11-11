@@ -1,0 +1,72 @@
+[+] Analyzing '../Task 1/arp_spoof.pcap' (8323 total packets)...
+
+--- 🗣️ Top Talkers (IP/ARP Sources) ---
+[+] 192.168.100.2    : 3467 packets
+[+] 34.236.82.201    : 953 packets
+[+] 3.95.50.61       : 829 packets
+[+] 104.21.31.250    : 388 packets
+[+] 142.250.178.35   : 294 packets
+
+--- 📊 Protocol Count (L3/L4) ---
+[+] ARP  : 368 packets
+[+] TCP  : 6021 packets
+[+] ICMP : 86 packets
+[+] UDP  : 1845 packets
+
+--- ❓ DNS Queries Performed ---
+[+] httpbin.org.
+[+] www.google.com.
+[+] httbin.org.
+[+] incoming.telemetry.mozilla.org.
+[+] telemetry-incoming.r53-2.services.mozilla.com.
+[+] euob.youstarsbuilding.com.
+[+] yfdnzf.com.
+[+] l.cdn-fileserver.com.
+[+] searchnowexpert.com.
+[+] obseu.youstarsbuilding.com.
+[+] www.clarity.ms.
+[+] scripts.clarity.ms.
+[+] msadsscale.microsoft.com.
+[+] vmss-clarity-tag-sln.switzerlandnorth.cloudapp.azure.com.
+[+] s.yimg.com.
+[+] s.cdn-fileserver.com.
+[+] edge.gycpi.b.yahoodns.net.
+[+] part-0025.t-0009.t-msedge.net.
+[+] sra-px.cdn-fileserver.com.
+[+] rsra-ph.cdn-fileserver.com.
+[+] rsras.cdn-fileserver.com.
+[+] www.mydomaincontact.com.
+[+] _ipps._tcp.local.
+[+] fonts.googleapis.com.
+[+] fonts.gstatic.com.
+[+] connectivity-check.ubuntu.com.
+[+] github.com.
+[+] kennethreitz.org.
+[+] google.com.
+[+] 110.178.250.142.in-addr.arpa.
+[+] example.com.
+[+] httpbin.com.
+[+] test.rebex.net.
+[+] telehack.com.
+
+--- 🌐 HTTP URLs Visited ---
+[+] GET http://192.168.100.1/
+[+] GET http://httpbin.org/get
+[+] GET http://httpbin.org/post
+[+] GET http://httbin.org/
+[+] GET http://httbin.org/munin/a/ls?t=69130b14&token=b72d8314b91f51314dca201a29c86dd37fe367e8
+[+] GET http://httbin.org/favicon.ico
+[+] GET http://httpbin.org/
+[+] GET http://httpbin.org/flasgger_static/swagger-ui.css
+[+] GET http://httpbin.org/flasgger_static/swagger-ui-standalone-preset.js
+[+] GET http://httpbin.org/flasgger_static/swagger-ui-bundle.js
+[+] GET http://httpbin.org/flasgger_static/lib/jquery.min.js
+[+] GET http://httpbin.org/static/favicon.ico
+[+] GET http://httpbin.org/spec.json
+[+] GET http://connectivity-check.ubuntu.com./
+
+--- 🗄️ FTP Credentials (plaintext!) ---
+[!] USER demo
+[!] PASS password
+
+[+] Analysis completed.

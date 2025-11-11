@@ -1,0 +1,6 @@
+# --- Target Websites ---
+example.com 192.168.100.3
+www.example.com 192.168.100.3
+google.com 192.168.100.3
+www.google.com 192.168.100.3
+192.168.100.1 192.168.100.3
